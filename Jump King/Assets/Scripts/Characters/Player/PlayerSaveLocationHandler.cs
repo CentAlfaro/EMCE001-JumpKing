@@ -22,12 +22,10 @@ namespace Characters.Player
         public void SavePlayerLocation()
         {
             var position = player.transform.position;
-            var scale = player.transform.localScale;
             _localLocation = new PlayerLocationData()
             {
                 xPos = position.x,
                 yPos = position.y,
-                xScale = scale.x,
             };
             var data= JsonUtility.ToJson(_localLocation);
             PlayerPrefs.SetString(SaveKey,data);
@@ -50,9 +48,7 @@ namespace Characters.Player
             }
             
             player.transform.position = new Vector2((float) _localLocation.xPos,(float) _localLocation.yPos);
-            var localScale = player.transform.localScale;
-            localScale = new Vector3((float) _localLocation.xScale, localScale.y, localScale.z);
-            player.transform.localScale = localScale;
+            
         }
 
        

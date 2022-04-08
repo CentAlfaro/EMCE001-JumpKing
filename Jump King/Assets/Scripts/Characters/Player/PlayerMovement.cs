@@ -1,104 +1,77 @@
 using System;
+using System.Numerics;
 using UnityEngine;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 namespace Characters.Player
 {
     public class PlayerMovement : MonoBehaviour
     {
-        [SerializeField] protected PlayerInputHandler inputHandler;
-        [SerializeField] private CharacterData characterData;
-        [SerializeField] private Rigidbody2D rb;
-
+        private Rigidbody2D Rb { get; set;}
         [SerializeField] private Transform groundCheck;
         [SerializeField] private float checkRadius;
         [SerializeField] private LayerMask groundLayer;
-        
-        public int facingDirection;
-        public bool isOnGround { get; private set;}
-        
-        protected CharacterData CharacterData => characterData;
-        protected Rigidbody2D Rb
+        public Vector2 CurrentVelocity { get; private set; }
+        public int facingDirection = 1;
+        public bool IsOnGround { get; private set;}
+
+        private void OnDrawGizmos()
         {
-            get => rb;
-            set => rb = value;
+            Gizmos.DrawWireSphere(groundCheck.position, checkRadius);
+
         }
 
         private void Start()
         {
-            
+            Rb = GetComponent<Rigidbody2D>();
         }
 
         private void Update()
         {
-            JumpInput();
+            CurrentVelocity = Rb.velocity;
         }
 
         private void FixedUpdate()
         {
-            var horizontalInput = inputHandler.xInput;
-            isOnGround = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer); 
-            HandleMovement(horizontalInput);
-            HandleJump();
+            IsOnGround = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer);
+            
+        }
+
+        public void UpdateVelocity(Vector2 velocity)
+        {
+            Rb.velocity = velocity;
+        }
+        public void AddVelocity(Vector2 velocity)
+        {
+            Rb.velocity += velocity;
+        }
+        public void AddVelocityY(float velocity)
+        {
+            Rb.velocity = new Vector2(CurrentVelocity.x, velocity);
+        }
+
+        public void AddVelocityX(float velocity)
+        {
+            Rb.velocity = new Vector2(velocity, CurrentVelocity.y);
         }
         
-        private void HandleMovement(float horizontal)
-        {
-            Rb.velocity = new Vector2(horizontal * characterData.movementSpeed, Rb.velocity.y);
-            CheckIfShouldFlip(horizontal);
-        }
-        private void CheckIfShouldFlip(float xInput)
+        public void CheckIfShouldFlip(float xInput)
         {
             var normalizedXInput = Mathf.RoundToInt(xInput);
             if (normalizedXInput != 0 && normalizedXInput != facingDirection)
             {
+                
                 Flip();
             }
         }
         private void Flip()
         {
             facingDirection *= -1;
-            var localScale = transform.localScale;
+            var transform1 = transform;
+            var localScale = transform1.localScale;
             localScale = new Vector3(localScale.x * -1, localScale.y, localScale.z);
-            transform.localScale = localScale;
-            //flips the where the player is facing
-            // if ((horizontal > 0 && !_facingRight || horizontal < 0 && _facingRight))
-            // {
-            //     ChangeDirection();
-            // }
-        }
-        private void HandleJump()
-        {
-            //Makes the player jump if the player detects the ground
-            if (/*_jump &&*/ isOnGround)
-            {
-                Rb.velocity = Vector2.up * characterData.jumpVelocity;
-            }
-
-            switch (Rb.velocity.y)
-            {
-                // Multiplies the gravity when the player is falling down
-                case < 0:
-                    Rb.velocity += Vector2.up * Physics2D.gravity.y * (characterData.fallMultiplier - 1) * Time.deltaTime;
-                    break;
-                //Increases the gravity so that the player doesn't jump too high when not holding jump button anymore
-                case > 0 when !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.Space):
-                    Rb.velocity += Vector2.up * Physics2D.gravity.y * (characterData.lowJumpMultiplier - 1) * Time.deltaTime;
-                    break;
-            }
-        }
-        
-        private void JumpInput()
-        {
-            //jump inputs
-            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space))
-            {
-               // _jump = true;
-            }
-
-            if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.Space))
-            {
-                //_jump = false;
-            }
+            transform1.localScale = localScale;
         }
     }
 }

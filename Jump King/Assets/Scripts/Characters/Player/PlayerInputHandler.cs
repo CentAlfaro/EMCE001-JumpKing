@@ -5,13 +5,18 @@ namespace Characters.Player
 {
     public class PlayerInputHandler : MonoBehaviour
     {
-        public float xInput  { get; private set;}
-        public bool jumpInput { get; private set;}
+        public float XInput  { get; private set;}
+        public bool JumpInput { get; private set;}
 
         private void Update()
         {
-            xInput = Input.GetAxisRaw("Horizontal");
-            jumpInput = Input.GetKeyDown(KeyCode.Space);
+            XInput = Input.GetAxisRaw("Horizontal");
+            JumpInput = CheckJumpInput();
+        }
+        
+        private bool CheckJumpInput()
+        {
+            return Input.GetKey(KeyCode.W);
         }
     }
 }

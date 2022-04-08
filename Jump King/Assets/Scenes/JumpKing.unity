@@ -4152,6 +4152,8 @@ GameObject:
   - component: {fileID: 2030079776}
   - component: {fileID: 2030079775}
   - component: {fileID: 2030079779}
+  - component: {fileID: 2030079781}
+  - component: {fileID: 2030079780}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -4191,7 +4193,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 3cdf1a9dfa4fbd94fa04bd7aff44d509, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -4277,6 +4279,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35e02df4686882b46a075fc16328a656, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterData: {fileID: 11400000, guid: a0f8e4e2e799bb1439ef788193cc9e66, type: 2}
+  inputHandler: {fileID: 2030079780}
+  movement: {fileID: 2030079781}
+--- !u!114 &2030079780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2030079774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 872fff79879e47e2831d19a00ddd25ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2030079781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2030079774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1ff61529e9849a46a4990f168f5cada, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundCheck: {fileID: 1991608041}
+  checkRadius: 0.06
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  facingDirection: 1
 --- !u!1 &2060494986
 GameObject:
   m_ObjectHideFlags: 0
